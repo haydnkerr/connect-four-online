@@ -1324,7 +1324,9 @@ socket.on("find", (e) => {
     populateBoard();
     playOnlinePerson();
     changePlayerTurn();
-
+    let playerShell = document.querySelector('.player-one-score')
+    let oppShell = document.querySelector('.player-two-score')
+    
     const foundObj = allPlayersArray.find(obj => obj.p1.p1name === playerName || obj.p2.p2name === playerName);
 
     if (foundObj) {
@@ -1333,7 +1335,19 @@ socket.on("find", (e) => {
 
         playerOneName.innerText = playerName;
         playerTwoName.innerText = oppName;
+        console.log(value)
+
+        if (value == 'yellow') {
+            playerShell.classList.add('yellow-bg')
+            oppShell.classList.add('red-bg')
+
+        } else {
+            playerShell.classList.add('red-bg')
+            oppShell.classList.add('yellow-bg')
+        }
     }
+
+
 });
 
 socket.on("playing", (e) => {
@@ -1344,14 +1358,18 @@ socket.on("playing", (e) => {
         const p2id = foundObj.p2 ? foundObj.p2.p2move : '';
 
         if (p1id !== '') {
+            playerOneArray.push(p1id)
             gameboardArray[p1id].classList.add('taken', 'red');
             gameboardArray[p1id].classList.remove('empty');
         }
 
         if (p2id !== '') {
+            playerTwoArray.push(p2id)
             gameboardArray[p2id].classList.add('taken', 'yellow');
             gameboardArray[p2id].classList.remove('empty');
         }
+        console.log(playerTwoArray)
+        console.log(playerOneArray)
     } else {
         console.log("Player not found or moves not available");
     }

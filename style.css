@@ -217,6 +217,14 @@ button:hover {
 
 }
 
+.yellow-bg {
+    background: url("./assets/yellow-shell-score.png");
+}
+
+.red-bg {
+    background: url("./assets/red-shell-score.png");
+}
+
 /* Universal class for stylings of Player Score container */
 .score {
     background-position: center;
