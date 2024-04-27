@@ -275,6 +275,40 @@ button:hover {
     align-items: flex-start;
 }
 
+.circle-container {
+    width: 100%;
+    display: flex;
+    height: 75px;
+    justify-content: center;
+    align-items: center;
+}
+
+.circle {
+    position: relative;
+}
+
+.circle span {
+    position: absolute;
+    width: 7px;
+    height: 22px;
+    background: rgb(139, 81, 0);
+    border-radius: 50px;
+    transform: rotate(calc(var(--i) * (360deg / 12))) translateY(30px);
+    opacity: 0.1;
+    animation: loading 1.2s linear infinite;
+    animation-delay: calc(var(--i) * 0.1s);
+}
+
+@keyframes loading {
+    0% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0.1
+    }
+
+}
+
 #menu-container {
     background-image: url("./assets/menu-bg.png");
     background-repeat: no-repeat;

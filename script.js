@@ -1298,8 +1298,16 @@ let playerName;
 const socket = io();
 let value;
 
-document.getElementById("cancel-search-btn").addEventListener("click", toggleSearch);
-document.getElementById("online-btn").addEventListener("click", toggleSearch);
+let cancelSearchBtn = document.getElementById("cancel-search-btn")
+let onlineBtn = document.getElementById("online-btn")
+
+let findGameContainer = document.querySelector('.find-game-container')
+let homeMenuBtns = document.querySelector('.home-menu-btns')
+let toggleOptions = document.getElementById('toggle-options')
+let loadingAnimation = document.querySelector('.circle-container')
+
+cancelSearchBtn.addEventListener("click", toggleSearch);
+onlineBtn.addEventListener("click", toggleSearch);
 
 function toggleSearch() {
     document.querySelector('.find-game-container').classList.toggle('display-none');
@@ -1309,6 +1317,8 @@ function toggleSearch() {
 
 document.getElementById("search-btn").addEventListener('click', function (event) {
     event.preventDefault();
+    findGameContainer.classList.toggle('display-none');
+    loadingAnimation.classList.toggle('display-none');
     playerName = document.getElementById("name").value;
 
     if (playerName == '' || playerName == null) {
