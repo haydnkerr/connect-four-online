@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Connect Four</title>
+    <meta property='og:title' content='Connect Four' />
+
+
+    <link rel="stylesheet" href="./style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <meta property="og:url" content="https://github.uconn.edu/pages/hak20012/dmd-3475/finalProject/">
+    <meta property="og: type" content="website">
+    <meta property="og: site name" content="Connect Four">
+    <meta property="og:title" content="Connect Four">
+    <meta property="og:image"
+        content="https://github.uconn.edu/pages/hak20012/dmd-3475/finalProject/assets/thumbnail.png">
+
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Comic+Neue:wght@400;700&display=swap" rel="stylesheet">
+
+    <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;500;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <!--  Welcome to my version of Connect Four. The aim of this project was to get familiar with javacscript methods including arrays, if statements
+          and DOM manipulation. Rather than mimicking classic versions of the game I also challenged myself to come up with a unique design that was
+          both eye catching and interesting to myself. The game itself opens with a menu giving a brief description of mechanics and how to play the
+          game. The user is then asked whether they would like to play a human in a pass and play style game or play against the computer with a 
+          difficulty that can be adjusted between easy and hard. There is also an option to turn off the background animations if performance is
+          effect. 
+
+          Throughout this project I learnt a great deal about logic, structure and heirarchy in order to facilitate the exact process I was after.
+          The most challenging part for me was coding the computer portion of the javascript which required me to understand exactly how it should
+          respond when faced with certain layouts. This was a great learning curve and there would definitely be some things I would do differently
+          if I were to do it again that would make the code more efficient, however overall I am proud of what I have achieved. 
+
+          To give a quick summary of how the computer works, it first checks if it has any winning lines it can complete, then checks if there are
+          any winning lines of the player it can block. If none of these can be met then it will place pieces in strategic spots on the first and
+          second row followed by a last option of placing a piece in a randomly generated column. I hope you enjoy!  ----->
+
+    <audio id="win-sound">
+        <source src="./assets/win.wav" type="audio/wav">
+    </audio>
+
+    <audio id="shell-sound">
+        <source src="./assets/shell.wav" type="audio/wav">
+    </audio>
+
+    <audio id="bubble-sound">
+        <source src="./assets/bubbles.wav" type="audio/wav">
+    </audio>
+
+    <div class="background" id="background">
+        <div class="align-start">
+            <section id="menu-container">
+
+                <img class="game-logo" src="./assets/logo.png">
+
+                <div id="menu-btns-container">
+                    <ul class="game-rules-container">
+                        <li>Use the arrow keys or buttons located below the gameboard to select a column inidicated by
+                            the flashing arrow</li>
+                        <li>Once you have chosen press enter or the "Drop Shell" button to place your shell</li>
+                        <li>The first Player with four shells in a row, up, across or diagonally, wins!</li>
+
+                    </ul>
+                    <form id="toggle-options">
+                        <div id="animation-toggle">
+                            <label for="animation-on">Animation</label>
+                            <input id="animation-on" type="checkbox" value="1" checked>
+                        </div>
+                        <div id="difficulty-toggle" class="difficulty-toggle">
+
+                            <label for="easy" id="difficulty">Difficulty</label>
+                            <div class="align-center">
+                                <h5>Easy</h5>
+                                <input for="hard" name="difficulty" id="easy" type="radio" value="1">
+                            </div>
+                            <div class="align-center">
+                                <h5>Hard</h5>
+                                <input name="difficulty" id="hard" type="radio" value="2" checked>
+                            </div>
+
+                        </div>
+
+
+                    </form>
+                    <form class="find-game-container display-none">
+                        <label>Enter your name:</label>
+                        <input type="text" id="name">
+                        <div class="buttons">
+                            <button class="menu-btn" type="button" id="search-btn">Search</button>
+                            <button class="menu-btn" id="cancel-search-btn">Cancel</button>
+                        </div>
+
+                    </form>
+                    <div class="home-menu-btns ">
+                        <div class="buttons">
+                            <button class="menu-btn" id="player-btn">vs Player</button>
+                            <button class="menu-btn" id="computer-btn">vs Computer</button>
+                        </div>
+                        <button class="menu-btn" id="online-btn">Play Online</button>
+                    </div>
+
+                </div>
+
+            </section>
+            <span id="close-menu-btn">X</span>
+        </div>
+
+
+    </div>
+
+
+    <img class="fish small" id="fish-one" src="./assets/fish1.png">
+    <img class="fish small" id="fish-two" src="./assets/fish2.png">
+    <img class="fish medium" id="fish-three" src="./assets/fish3.png">
+    <img class="fish medium" id="fish-four" src="./assets/fish2.png">
+    <img class="fish large" id="fish-five" src="./assets/fish5.png">
+
+    <img class="fish small" id="fish-seven" src="./assets/fish2-left.png">
+    <img class="fish small" id="fish-eight" src="./assets/fish3-left.png">
+    <img class="fish medium" id="fish-nine" src="./assets/fish2-left.png">
+    <img class="fish medium" id="fish-ten" src="./assets/fish3-left.png">
+    <img class="fish large" id="fish-eleven" src="./assets/fish3-left.png">
+    <img class="fish group" id="fish-group" src="./assets/groupOfFish.png">
+
+
+    <img class="creature" id="crab" src="./assets/crab.png">
+    <img class="creature" id="seahorse" src="./assets/seahorse.png">
+    <section class="winning-screen display-none" id="winning-screen">
+        <div class="winning-container">
+            <h1 id="winning-statement"></h1>
+            <div>
+                <button id="play-again-btn">Play again</button>
+
+            </div>
+
+        </div>
+    </section>
+    <section class="scoreboard-container">
+        <div class="display-flex">
+            <div class="player-details-container">
+            <div class="score player-one-score">
+                    <h2 id="player-one-score">0</h2>
+
+            </div>
+            <span class="player-name player-one-name">Player 1</span>
+            </div>
+            <img class="left display-none" id="player-one-turn" src="./assets/indicator-white.png">
+        </div>
+
+
+
+        <div class="display-flex">
+            <img class="right display-none" id="player-two-turn" src="./assets/indicator-white.png">
+            <div class="player-details-container">
+                <div class="score player-two-score">
+                    <h2 id="player-two-score">0</h2>
+                </div>
+                <span class="player-name player-two-name">Player 2</span>
+
+            </div>
+            
+        </div>
+
+
+    </section>
+
+
+    <section class="col-indicator">
+        <div class="full-width flash">
+            <img class="" id="col-one" src="./assets/indicator-white.png">
+        </div>
+        <div class="full-width flash">
+            <img class="hidden" id="col-two" src="./assets/indicator-white.png">
+        </div>
+        <div class="full-width flash">
+            <img class="hidden" id="col-three" src="./assets/indicator-white.png">
+        </div>
+        <div class="full-width flash">
+            <img class="hidden" id="col-four" src="./assets/indicator-white.png">
+        </div>
+        <div class="full-width flash">
+            <img class="hidden" id="col-five" src="./assets/indicator-white.png">
+        </div>
+        <div class="full-width flash">
+            <img class="hidden" id="col-six" src="./assets/indicator-white.png">
+        </div>
+        <div class="full-width flash">
+            <img class="hidden" id="col-seven" src="./assets/indicator-white.png">
+        </div>
+    </section>
+
+    <section id="gameboard">
+
+    </section>
+
+    <section class="indicator-arrow-container">
+        <img id="arrow-left" src="./assets/indicator-white.png">
+        <button id="play-btn">
+            Drop Shell
+        </button>
+        <img id="arrow-right" src="./assets/indicator-white.png">
+    </section>
+    <section class="bottom-nav-container">
+        <button id="menu-btn">Menu</button>
+        <button id="restart-btn">Restart</button>
+    </section>
+
+
+
+
+
+
+
+
+<script src="/socket.io/socket.io.js"></script>
+<script src="./script.js"></script>
+<script src="online.js">
+    
+</script>
+
+</body>
+
+</html>

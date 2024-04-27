@@ -1,0 +1,734 @@
+* {
+    padding: 0px;
+    margin: 0px;
+    box-sizing: border-box;
+}
+
+/**************************** Contents ***************************************/
+/*
+1. Universal Stylings
+2. Gameboard Interface
+3. Player interaction buttons
+4. Scoreboard Inteface
+5. Menu Interface
+6. Creature Illustrations
+7. Media Queries 
+*/
+
+/****************************      1. Universal stylings       ******************************/
+
+body {
+    height: 100dvh;
+    width: 100vw;
+    background: url("./assets/desktop-background.png");
+    background-size:cover;
+    background-repeat: no-repeat;
+    background-position: center bottom;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 0px 250px;
+    overflow: hidden;
+}
+
+h5 {
+    font-family:'comic neue','Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    font-weight: 700;
+    color: rgb(139, 81, 0);
+}
+
+.display-flex {
+    display: flex;
+    align-items: center;
+}
+
+.space-between {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+}
+
+.align-center {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.full-width {
+    width: 100%;
+}
+
+.half-width {
+    width: 48%;
+}
+
+.full-width {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.hidden {
+    visibility: hidden;
+}
+
+button:hover {
+    cursor: pointer;
+}
+
+/****************************         2. Gameboard Interface          ****************************/
+#gameboard {
+    width: 100%;
+    display: none;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 8px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 25px;
+    padding: 25px;
+    margin: 20px 0px 25px 0px;
+    max-width: 750px;
+}
+
+/* Class fo empty slots */
+.empty {
+    width: 13%;
+    height: 65px;
+    background: url("./assets/empty-slot.png");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: contain;
+    opacity: 0.3;
+}
+
+/* Class for Player One Pieces */
+.red {
+    padding: 0px;
+    width: 13%;
+    height: 65px;
+    background-image: url("./assets/red-shell.png");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size:contain;
+}
+
+/* Class for Player Two Pieces */
+.yellow {
+    padding: 0px;
+    width: 13%;
+    height: 65px;
+    background: url("./assets/yellow-shell.png");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size:contain;
+}
+
+/****************************       3. Player Interaction Buttons           *****************************/
+#arrow-left {
+    width: 30px;
+    height: auto;
+    transform: rotate(90deg);
+
+}
+
+#arrow-right {
+    width: 30px;
+    height: auto;
+    transform: rotate(-90deg);
+}
+
+#play-btn {
+    width: 150px;
+    height: 40px;
+    background-color: #ca45fa;
+    border: none;
+    border-radius: 10px;
+    margin: 0px 25px;
+    color: white;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    font-weight: 600;
+    letter-spacing: 3px;
+    
+}
+
+.col-indicator {
+    width: 100%;
+    display: none;
+    justify-content: space-between;
+    padding: 0px 25px;
+    max-width: 750px;
+    gap: 8px;
+    z-index: 4;
+}
+
+
+.col-indicator img{
+    width: 25px;
+    height: auto;
+}
+
+
+
+.indicator-arrow-container {
+    display: none;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+
+/****************************        4. Scoring Interface            ****************************/
+.scoreboard-container {
+    position: absolute;
+    top: 25px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    padding: 0px 50px;
+}
+
+.player-details-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.player-name {
+    color: white;
+    font-family:'comic neue','Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    font-weight: 700;
+    font-size: 1.4rem;
+
+}
+
+/* Setting Background shells for player scores */
+.player-one-score {    
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;                                      
+    background: url("./assets/red-shell-score.png");
+}
+
+.player-two-score {
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    background: url("./assets/yellow-shell-score.png");
+
+}
+
+/* Universal class for stylings of Player Score container */
+.score {
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: contain;
+    width: 100px;
+    height: 100px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    font-size: 2rem;
+}
+
+
+/* Arrow indicating who's turn it is */
+.left {
+    width: 25px;
+    height: auto;
+    transform: rotate(90deg);
+    margin-left: 10px;
+}
+
+.right {
+    width: 25px;
+    height: auto;
+    transform: rotate(-90deg);
+    margin-right: 10px;
+}
+
+
+
+/****************************        5. Menu Interface         ****************************/
+.background {
+    position: absolute;
+    height: 100%;
+    width: 100vw;
+    background-color: rgba(0, 0, 0, 0.6);
+    z-index: 5;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 25px;
+}
+
+.align-start {
+    display: flex;
+    align-items: flex-start;
+}
+
+#menu-container {
+    background-image: url("./assets/menu-bg.png");
+    background-repeat: no-repeat;
+    background-position: top;
+    background-size: cover;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    background-color: white;
+    height: 90dvh;
+    max-height: 650px;
+    width: 100%;
+    max-width: 450px;
+    border-radius: 10px;
+    padding: 20px;
+    border: 4px solid white;
+    
+}
+
+.game-logo {
+    width: 85%;
+    height: auto
+}
+
+.game-rules-container {
+    font-family:'comic neue','Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    font-weight: 700;
+    border-radius: 10px;
+}
+
+.game-rules-container li {
+    font-size: 1rem;
+    margin-bottom: 8px;
+    list-style: none;
+    font-weight: 700;
+    color: rgb(139, 81, 0);
+}
+
+#toggle-options {
+    font-family:'comic neue','Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    font-weight: 700;
+    color: rgb(139, 81, 0);
+    display: flex;
+    justify-content: space-between;
+}
+
+#toggle-options label {
+    font-family:'comic neue','Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    font-weight: 700;
+    color: rgb(139, 81, 0);
+}
+
+#difficulty-toggle, #animation-toggle {
+    display: flex;
+    justify-content: space-between;
+    width: 48%;
+    align-items: flex-end;
+}
+
+#toggle-options input {
+    margin-top: 5px;
+}
+
+#menu-btns-container {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    gap: 15px;
+
+}
+
+.buttons {
+    display: flex;
+    gap: 10px;
+}
+
+.menu-btn {
+    width: 100%;
+    height: 40px;
+    background-color: #41d95d;
+    border: none;
+    border-radius: 5px;
+    color: white;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    font-weight: 600;
+    letter-spacing: 3px;
+}
+
+#menu-btn, #restart-btn {
+    width: 115px;
+    height: 40px;
+    background-color: #41d95d;
+    border: none;
+    border-radius: 10px;
+    color: white;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    font-weight: 600;
+    letter-spacing: 3px;
+    margin-right: 5px;
+}
+
+.home-menu-btns {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+#restart-btn {
+    margin-left: 5px;
+}
+
+.find-game-container > label, .find-game-container > input {
+    font-family:'comic neue','Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    font-weight: 700;
+    color: rgb(139, 81, 0);
+}
+
+
+
+#name {
+    width: 100%;
+    height: 30px;
+    margin: 10px 0px;
+    border: none;
+    border-radius: 5px;
+    padding: 5px;
+    
+}
+
+
+
+#online-btn, #cancel-search-btn  {
+    background-color: #ca45fa;
+}
+
+#close-menu-btn {
+    font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    font-weight: 600;
+    color: white;
+    /*background-color: white;*/
+    border-radius: 50%;
+    padding: 5px 7px;
+    transform: translateY(-40px);
+    font-size: 2rem;
+}
+
+#close-menu-btn:hover {
+    cursor: pointer;
+}
+
+
+.bottom-nav-container {
+    display: none;
+}
+
+.winning-screen {
+    position: absolute;
+    width: 100%;
+    height: 200px;
+    background-color: rgba(0, 0, 0, 0.6);
+    z-index: 5;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.winning-container {
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    width: 100%;
+}
+
+.winning-container button {
+    width: 150px;
+    height: 40px;
+    background-color: #41d95d;
+    border: none;
+    border-radius: 10px;
+    color: white;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    font-weight: 600;
+    letter-spacing: 3px;
+    margin-right: 5px;
+}
+
+#close-win-screen-btn {
+    margin: 0px 0px 0px 5px;
+}
+
+#play-again-btn {
+    background-color: #ca45fa;
+}
+
+h1 {
+    margin-bottom: 10px;
+    color: white;
+    font-size: 5rem;
+}
+
+
+
+/****************************       6. Creature Illustrations        ****************************/
+.fish {
+    position: absolute;
+    z-index: -1;
+}
+
+#fish-one {
+    top: 50px
+}
+#fish-two{
+    top: 300px
+}
+#fish-three {
+    top: 375px
+}
+#fish-four {
+    top: 150px;
+}
+
+#fish-five {
+    top: 200px
+}
+
+#fish-seven {
+    top: 100px
+}
+#fish-eight {
+    top: 125px;
+}
+
+#fish-nine {
+    top: 400px
+}
+#fish-ten {
+    top: 325px
+}
+#fish-eleven {
+    top: 255px
+}
+
+
+.small {
+    width: 75px;
+    height: auto;
+    left: 0px;
+}
+
+.medium {
+    width: 125px;
+    height: auto;
+    left: 200px;
+}
+
+.large {
+    width: 175px;
+    height: auto;
+    left: 500px;
+}
+
+.group {
+    width: 150px;
+    height: auto;
+    top: 100px;
+}
+
+.creature {
+    position: absolute;
+}
+
+#crab {
+    width: 175px;
+    height: auto;
+    bottom: 15px;
+    right: 100px;
+    z-index: 3;
+    animation: moveLeftRight 6s infinite ease-in-out;
+    }
+
+
+
+#seahorse {
+    height: 300px;
+    width: auto;
+    left: 25px;
+    z-index: 3;
+    top: 400px;
+    animation: floatUpDown 4s infinite ease-in-out;
+
+}
+
+@keyframes floatUpDown {
+    0% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-20px);
+    }
+    100% {
+        transform: translateY(0);
+    }
+}
+
+.display-none {
+    display: none;
+}
+
+/****************************        6. Media Queries        *******************************/
+
+@media (max-width:1100px) {
+    .menu-btns {
+        right: 0px
+    }
+    body {
+        padding: 0px 175px;
+    }
+    #seahorse {
+        height: 225px;
+    }
+}
+
+@media (max-width:950px) {
+    /* Universal class for stylings of Player Score container */
+    body {
+        padding: 0px 125px;
+    }
+
+    .col-indicator img{
+        width: 20px;
+    }
+
+    .score {
+    width: 70px;
+    height: 70px;
+    font-size: 1.4rem;
+}
+
+.player-one-score {                                          
+    margin-right: 5px;
+}
+
+.player-two-score {
+    margin-left: 5px;
+}
+
+/* Arrow indicating who's turn it is */
+.left {
+    width: 15px;
+}
+
+.right {
+    width: 15px;
+}
+
+    #crab {
+        
+        right: 45px;
+    }
+    #seahorse {
+        bottom: 20px;
+    }
+
+    
+}
+
+@media (max-width:850px) {
+    body {
+        padding: 0px 25px;
+    }
+
+    #crab {
+        width: 140px;
+    }
+
+    #seahorse {
+        height: 175px;
+        transform: translateY(125px);
+    }
+    
+}
+
+@media (max-width:700px) {
+    body {
+        padding: 0px 25px;
+    }
+
+    #gameboard {
+        margin-top: 10px;
+    }
+
+    #gameboard, .col-indicator img, .indicator-arrow-container, #menu-btn, #restart-btn {
+        transform: translateY(25px);
+    }
+
+
+    
+    #crab {
+        width: 100px;
+    }
+}
+
+@media (max-width: 600px) {
+    .fish {
+        display: none
+    }
+}
+
+@media (max-width:550px) {
+
+    
+    #seahorse {
+        left: 10px;
+        display: none;
+    }
+    #crab {
+        right: 0px;
+        bottom: 20px;
+        display: none;
+    }
+
+    #gameboard {
+        gap: 3px;
+    }
+
+    .empty {
+        width: 13%;
+        height: 45px;
+    }
+
+    .red, .yellow {
+        width: 13%;
+        height: 45px
+    }
+
+    h1 {
+        font-size: 3rem;
+    }
+
+    #close-menu-btn {
+       display: none;
+    }
+
+    #menu-container {
+        font-size: .9rem;
+        padding: 10px;
+        height: 600px;
+    }
+
+    .menu-btn {
+        height: 30px;
+        font-size: 0.65rem;
+        
+    }
+
+    .game-logo {
+        margin-bottom: 100px;
+    }
+}
