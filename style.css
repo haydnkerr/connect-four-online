@@ -112,6 +112,7 @@ button:hover {
     background-position: center;
     background-repeat: no-repeat;
     background-size:contain;
+    animation: drop 0.5s linear;
 }
 
 /* Class for Player Two Pieces */
@@ -123,6 +124,23 @@ button:hover {
     background-position: center;
     background-repeat: no-repeat;
     background-size:contain;
+    animation: drop 0.5s linear;
+}
+
+@keyframes drop {
+    0% {
+        transform: scale(1.1);
+    }
+    33% {
+        transform: rotate(10deg);
+    }
+
+    66% {
+        transform: rotate(-10deg);
+    }
+    100% {
+        transform: rotate(0);
+    }
 }
 
 /****************************       3. Player Interaction Buttons           *****************************/

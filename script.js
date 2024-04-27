@@ -5,6 +5,9 @@ let gameboard = document.getElementById('gameboard');
 let playerTurn = 0;
 let indicator = 1;
 let onlinePlay = false;
+let onlineOneArray = []
+let onlineTwoArray = [];
+let onlineTurn = "red;"
 let playerOneName= document.querySelector('.player-one-name')
 let playerTwoName = document.querySelector('.player-two-name')
 let playerOneScore = 0;
@@ -364,6 +367,9 @@ function playPerson() {
 };
 
 function playOnlinePerson() {
+    onlineOneArray = []
+    onlineTwoArray = []
+    onlineTurn = 'red'
     activeComputer = false;
     onlinePlay = true;
     bubbleSound.play();
@@ -479,7 +485,7 @@ function dropShell() {
                 }
             }
         }
-    } else {
+    } else if (onlineTurn == value) {
         let turn
         for (let i = 1; i <= 7; i++) {
             if (i === indicator) {
@@ -490,6 +496,7 @@ function dropShell() {
                         gameboardArray[j].classList.remove('empty');
                         turn = j
                         socket.emit("playing", {value:value, id:turn, playerName: playerName})
+                        console.log(playerOneArray)
                         break;
                     } else {
                         turn = 0;
@@ -1266,7 +1273,6 @@ function checkWin() {
             playerOneScoreContainer.innerHTML = playerOneScore;
             gameWon = true;
             winner.innerHTML = "Player One Wins!";
-            console.log("Player One Wins");
             winningScreen.classList.remove('display-none');
 
         } else if ((gameWon != true) && (winningArray[i].every(elem => playerTwoArray.includes(elem)))) {
@@ -1275,7 +1281,6 @@ function checkWin() {
             playerTwoScoreContainer.innerHTML = playerTwoScore;
             gameWon = true;
             console.log("Player Two Wins");
-            winner.innerHTML = "Player Two Wins!";
             winningScreen.classList.remove('display-none');
 
         } else {
@@ -1341,11 +1346,12 @@ socket.on("find", (e) => {
 
     if (foundObj) {
         const oppName = foundObj.p1.p1name === playerName ? foundObj.p2.p2name : foundObj.p1.p1name;
-        value = foundObj.p1.p1name === playerName ? foundObj.p2.p2value : foundObj.p1.p1value;
+        value = foundObj.p1.p1name === playerName ? foundObj.p1.p1value : foundObj.p2.p2value;
 
         playerOneName.innerText = playerName;
         playerTwoName.innerText = oppName;
-        console.log(value)
+        playerOneScore.innerHTML = foundObj.p1.p1score
+        playerTwoScore.innerHTML = foundObj.p2.p2score
 
         if (value == 'yellow') {
             playerShell.classList.add('yellow-bg')
@@ -1368,22 +1374,33 @@ socket.on("playing", (e) => {
         const p2id = foundObj.p2 ? foundObj.p2.p2move : '';
 
         if (p1id !== '') {
-            playerOneArray.push(p1id)
+            
             gameboardArray[p1id].classList.add('taken', 'red');
             gameboardArray[p1id].classList.remove('empty');
         }
 
         if (p2id !== '') {
-            playerTwoArray.push(p2id)
             gameboardArray[p2id].classList.add('taken', 'yellow');
             gameboardArray[p2id].classList.remove('empty');
         }
-        console.log(playerTwoArray)
-        console.log(playerOneArray)
+
+        if (foundObj.sum % 2 == 0) {
+            onlineTurn = "yellow"
+            console.log("yellow is Here")
+        } else {
+            
+            onlineTurn = "red"
+            console.log("red is Here")
+        }
     } else {
         console.log("Player not found or moves not available");
     }
 });
+
+socket.on("winner", (e) => {
+    winner.innerHTML = e.playerWin + " Wins!";
+    winningScreen.classList.remove('display-none');
+})
 
 
 socket.on("error", (err) => {
