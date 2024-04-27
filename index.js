@@ -35,7 +35,7 @@ io.on("connection", (socket) => {
                     p2value: "yellow",
                     p2move: "",
                     p2arr: [],
-                    p2score: 3
+                    p2score: 0
                 }
 
                 let obj = {
@@ -141,6 +141,18 @@ io.on("connection", (socket) => {
         // Emitting to all clients including the sender
         io.emit("playing", { allPlayers: playerArray });
     });
+
+    socket.on("reset", (e)=> {
+        playerOneArray = [];
+        playerTwoArray = [];
+        console.log(playerArray[0].p1.p1arr)
+        playerArray[0].p1.p1arr = []
+        console.log(playerArray[0].p1.p1arr)
+        console.log(playerArray[0].p2.p2arr)
+
+        playerArray[0].p2.p2arr = []
+        console.log(playerArray[0].p2.p2arr)
+    })
     
     
     

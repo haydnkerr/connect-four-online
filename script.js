@@ -270,15 +270,19 @@ playAgainBtn.addEventListener("click", playAgain);
 
 function playAgain() {
     winningScreen.classList.add("display-none");
-    playerOneArray = [];
-    playerTwoArray = [];
-    playerTurn = 0;
-    gameWon = false;
-    for (let i = 0; i < 42; i++) {
-        gameboardArray[i].classList.remove('red');
-        gameboardArray[i].classList.remove('yellow');
-        gameboardArray[i].classList.add('empty');
-    };
+        playerOneArray = [];
+        playerTwoArray = [];
+        playerTurn = 0;
+        gameWon = false;
+        for (let i = 0; i < 42; i++) {
+            gameboardArray[i].classList.remove('red');
+            gameboardArray[i].classList.remove('yellow');
+            gameboardArray[i].classList.add('empty');
+        };
+    if (onlinePlay) {
+        socket.emit("reset", true)
+    }
+    
 };
 
 //********************************** For loop to initiate the game board in the DOM *****************************//
