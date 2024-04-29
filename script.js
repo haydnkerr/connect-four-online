@@ -1354,8 +1354,9 @@ socket.on("find", (e) => {
 
         playerOneName.innerText = playerName;
         playerTwoName.innerText = oppName;
-        playerOneScore.innerHTML = foundObj.p1.p1score
-        playerTwoScore.innerHTML = foundObj.p2.p2score
+        playerOneScoreContainer.innerText = foundObj.p1.p1score
+        playerTwoScoreContainer.innerText = foundObj.p2.p2score
+
 
         if (value == 'yellow') {
             playerShell.classList.add('yellow-bg')
@@ -1372,7 +1373,6 @@ socket.on("find", (e) => {
 
 socket.on("playing", (e) => {
     const foundObj = e.allPlayers.find(obj => obj.p1 && obj.p1.p1name === playerName || obj.p2 && obj.p2.p2name === playerName);
-    console.log(foundObj)
     if (foundObj) {
         const p1id = foundObj.p1 ? foundObj.p1.p1move : '';
         const p2id = foundObj.p2 ? foundObj.p2.p2move : '';
@@ -1402,8 +1402,31 @@ socket.on("playing", (e) => {
 });
 
 socket.on("winner", (e) => {
-    winner.innerHTML = e.playerWin + " Wins!";
+    const foundObj = e.allPlayers.find(obj => obj.p1 && obj.p1.p1name === playerName || obj.p2 && obj.p2.p2name === playerName);
+
+    winner.innerHTML = e.playerWin + " wins!";
     winningScreen.classList.remove('display-none');
+
+
+    if (playerName == foundObj.p1.p1name) {
+        playerOneScoreContainer.innerText = foundObj.p1.p1score
+        playerTwoScoreContainer.innerText = foundObj.p2.p2score
+    } else {
+        playerOneScoreContainer.innerText = foundObj.p2.p2score
+    playerTwoScoreContainer.innerText = foundObj.p1.p1score
+    }
+    
+})
+
+socket.on("reset", (e) => {
+    winningScreen.classList.add('display-none');
+    winningScreen.classList.add("display-none");
+
+    for (let i = 0; i < 42; i++) {
+        gameboardArray[i].classList.remove('red');
+        gameboardArray[i].classList.remove('yellow');
+        gameboardArray[i].classList.add('empty');
+    };
 })
 
 

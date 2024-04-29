@@ -121,14 +121,16 @@ io.on("connection", (socket) => {
             if (onlineWinningArray[i].every(elem => playerToUpdate.p1.p1arr.includes(elem))) {
                 winnerName = playerToUpdate.p1.p1name;
                 playerToUpdate.p1.p1score += 1;
-                score = playerToUpdate.p1.p1score;
-                io.emit("winner", {playerWin: winnerName, score: score});
+                playerOneScore = playerToUpdate.p1.p1score;
+                playerTwoScore = playerToUpdate.p2.p2score;
+                io.emit("winner", {playerWin: winnerName, playerOneScoreUpdate: playerOneScore, playerTwoScoreUpdate: playerTwoScore, allPlayers: playerArray });
                 console.log("Winner is " + winnerName);
             } else if (onlineWinningArray[i].every(elem => playerToUpdate.p2.p2arr.includes(elem))) {
                 winnerName = playerToUpdate.p2.p2name;
                 playerToUpdate.p2.p2score += 1;
-                score = playerToUpdate.p2.p2score;
-                io.emit("winner", {playerWin: winnerName, score: score});
+                playerOneScore = playerToUpdate.p1.p1score;
+                playerTwoScore = playerToUpdate.p2.p2score;
+                io.emit("winner", {playerWin: winnerName, playerOneScoreUpdate: playerOneScore, playerTwoScoreUpdate: playerTwoScore, allPlayers: playerArray });
                 console.log("Winner is " + winnerName);
             }
         }
@@ -145,13 +147,11 @@ io.on("connection", (socket) => {
     socket.on("reset", (e)=> {
         playerOneArray = [];
         playerTwoArray = [];
-        console.log(playerArray[0].p1.p1arr)
-        playerArray[0].p1.p1arr = []
-        console.log(playerArray[0].p1.p1arr)
-        console.log(playerArray[0].p2.p2arr)
-
-        playerArray[0].p2.p2arr = []
-        console.log(playerArray[0].p2.p2arr)
+        playerArray[0].p1.p1arr = [];
+        playerArray[0].p2.p2arr = [];
+        playerArray[0].p1.p1move = '';
+        playerArray[0].p2.p2move = '';
+        io.emit("reset", true);
     })
     
     
