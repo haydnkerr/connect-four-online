@@ -143,6 +143,19 @@ button:hover {
     }
 }
 
+.winning-tiles {
+    animation: pulsate 1s linear infinite;
+}
+
+@keyframes pulsate {
+    0% {
+        transform: scale(1)
+    }
+50% {
+    transform: scale(1.1)
+}
+}
+
 /****************************       3. Player Interaction Buttons           *****************************/
 #arrow-left {
     width: 30px;
@@ -610,9 +623,7 @@ h1 {
     bottom: 15px;
     right: 100px;
     z-index: 3;
-    animation: moveLeftRight 6s infinite ease-in-out;
-    }
-
+}
 
 
 #seahorse {

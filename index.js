@@ -85,10 +85,6 @@ io.on("connection", (socket) => {
         [37, 31, 25, 19], [31, 25, 19, 13], [38, 32, 26, 20]
     ];
 
-    function checkWin() {
-
-        
-    };
 
     socket.on("playing", (e) => {
         const playerName = e.playerName;
@@ -100,22 +96,26 @@ io.on("connection", (socket) => {
             (player.p1 && player.p1.p1name === playerName) || (player.p2 && player.p2.p2name === playerName)
         );
     
-        console.log(playerToUpdate);
+
         
         if (playerToUpdate) {
             if (color === "red") {
                 playerToUpdate.p1.p1move = moveId;
                 playerToUpdate.p1.p1arr.push(moveId);
+                playerToUpdate.p2.p2move = '';
             } else if (color === "yellow") {
                 playerToUpdate.p2.p2move = moveId;
                 playerToUpdate.p2.p2arr.push(moveId);
+                playerToUpdate.p1.p1move = '';
             }
     
             playerToUpdate.sum++;
         } else {
             console.log(`Player ${playerName} not found in playerArray`);
         }
-    
+
+        console.log(playerToUpdate.p1.p1arr)
+        console.log(playerToUpdate.p2.p2arr)
         for (let i = 0; i < onlineWinningArray.length; i++) {
             let winnerName;
             if (onlineWinningArray[i].every(elem => playerToUpdate.p1.p1arr.includes(elem))) {
@@ -123,21 +123,24 @@ io.on("connection", (socket) => {
                 playerToUpdate.p1.p1score += 1;
                 playerOneScore = playerToUpdate.p1.p1score;
                 playerTwoScore = playerToUpdate.p2.p2score;
-                io.emit("winner", {playerWin: winnerName, playerOneScoreUpdate: playerOneScore, playerTwoScoreUpdate: playerTwoScore, allPlayers: playerArray });
-                console.log("Winner is " + winnerName);
+                playerToUpdate.p1.p1arr = []
+                playerToUpdate.p2.p2arr = []
+                io.emit("winner", {playerWin: winnerName, playerOneScoreUpdate: playerOneScore, playerTwoScoreUpdate: playerTwoScore, allPlayers: playerArray,onlineWinningArray: onlineWinningArray[i] });
             } else if (onlineWinningArray[i].every(elem => playerToUpdate.p2.p2arr.includes(elem))) {
                 winnerName = playerToUpdate.p2.p2name;
                 playerToUpdate.p2.p2score += 1;
                 playerOneScore = playerToUpdate.p1.p1score;
                 playerTwoScore = playerToUpdate.p2.p2score;
-                io.emit("winner", {playerWin: winnerName, playerOneScoreUpdate: playerOneScore, playerTwoScoreUpdate: playerTwoScore, allPlayers: playerArray });
-                console.log("Winner is " + winnerName);
+                playerToUpdate.p1.p1arr = []
+                playerToUpdate.p2.p2arr = []
+                io.emit("winner", {playerWin: winnerName, playerOneScoreUpdate: playerOneScore, playerTwoScoreUpdate: playerTwoScore, allPlayers: playerArray, onlineWinningArray: onlineWinningArray[i] });
             }
         }
     
-        if (playerOneArray.length === 21 && playerTwoArray.length === 21) {
+        if (playerToUpdate.p1.p1arr.length >= 21 && playerToUpdate.p2.p2arr.length >= 21) {
             winnerName = "draw";
-            io.emit("winner", {playerWin: winnerName});
+            console.log(winnerName)
+            io.emit("winner", {playerWin: winnerName, allPlayers: playerArray});
         }
     
         // Emitting to all clients including the sender

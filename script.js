@@ -273,10 +273,13 @@ function playAgain() {
         playerOneArray = [];
         playerTwoArray = [];
         playerTurn = 0;
+        winningArrayAnimation = [];
         gameWon = false;
         for (let i = 0; i < 42; i++) {
             gameboardArray[i].classList.remove('red');
             gameboardArray[i].classList.remove('yellow');
+            gameboardArray[i].classList.remove('taken');
+            gameboardArray[i].classList.remove('winning-tiles');
             gameboardArray[i].classList.add('empty');
         };
     if (onlinePlay) {
@@ -291,7 +294,7 @@ function populateBoard() {
     inidicatorArrowContainer.style.display = "flex";
     bottomNavContainer.style.display = "flex";
     colIndicator.style.display = "flex";
-    menu.style.display = "none"
+    menu.classList.add('display-none')
     for (let i = 0; i < 42; i++) {
         slot = document.createElement('div');
         slot.className = 'slot empty';
@@ -448,11 +451,6 @@ function dropShell() {
     if (!onlinePlay) {
         if (gameWon) {
             playerTurn += 0;
-    
-    
-    
-    
-    
             //********* This can be shortened ********//
         } else if (playerTurn === 0) {          //**************************** Player One Drop Function ****************************//
             for (let i = 1; i <= 7; i++) {
@@ -462,6 +460,7 @@ function dropShell() {
                             gameboardArray[j].classList.add('taken');
                             gameboardArray[j].classList.add('red');
                             gameboardArray[j].classList.remove('empty');
+                            dropShellSound()
                             playerOneArray.push(j);
                             playerTurn += 1;
                             break;
@@ -479,6 +478,7 @@ function dropShell() {
                             gameboardArray[j].classList.add('taken');
                             gameboardArray[j].classList.add('yellow');
                             gameboardArray[j].classList.remove('empty');
+                            dropShellSound()
                             playerTwoArray.push(j);
                             playerTurn -= 1;
                             break;
@@ -495,12 +495,13 @@ function dropShell() {
             if (i === indicator) {
                 for (let j = i + 34; j >= 0; j -= 7) {
                     if (gameboardArray[j].classList.contains('empty')) {
+                        dropShellSound()
                         gameboardArray[j].classList.add('taken');
                         gameboardArray[j].classList.add(value);
                         gameboardArray[j].classList.remove('empty');
+                        console.log(onlineTurn)
                         turn = j
                         socket.emit("playing", {value:value, id:turn, playerName: playerName})
-                        console.log(playerOneArray)
                         break;
                     } else {
                         turn = 0;
@@ -509,19 +510,23 @@ function dropShell() {
             }
         }
     }
+
+    if (!onlinePlay) {
+        if (playerTurn === 0) {
+            playerOneTurn = document.getElementById('player-one-turn');
+            playerTwoTurn = document.getElementById('player-two-turn');
+            playerTwoTurn.classList.add("display-none");
+            playerOneTurn.classList.remove("display-none");
+        } else if (playerTurn === 1) {
+            playerOneTurn = document.getElementById('player-one-turn');
+            playerTwoTurn = document.getElementById('player-two-turn');
+            playerTwoTurn.classList.remove("display-none");
+            playerOneTurn.classList.add("display-none");
+        };
+    }
     
 
-    if (playerTurn === 0) {
-        playerOneTurn = document.getElementById('player-one-turn');
-        playerTwoTurn = document.getElementById('player-two-turn');
-        playerTwoTurn.classList.add("display-none");
-        playerOneTurn.classList.remove("display-none");
-    } else if (playerTurn === 1) {
-        playerOneTurn = document.getElementById('player-one-turn');
-        playerTwoTurn = document.getElementById('player-two-turn');
-        playerTwoTurn.classList.remove("display-none");
-        playerOneTurn.classList.add("display-none");
-    };
+    
 };
 
 //************************ Function that makes the column indicator flash ********************//
@@ -1251,41 +1256,52 @@ function computerTurn() {
 
 //***** Restart function. Wipes player scores back to 0. Clears board ******//
 function restart() {
-    playerOneArray = [];
-    playerTwoArray = [];
-    playerTurn = 0;
-    gameWon = false;
-    for (let i = 0; i < 42; i++) {
-        gameboardArray[i].classList.remove('red');
-        gameboardArray[i].classList.remove('yellow');
-        gameboardArray[i].classList.add('empty');
-    };
-    playerOneScore = 0;
-    playerTwoScore = 0;
-    playerOneScoreContainer.innerHTML = playerOneScore;
-    playerTwoScoreContainer.innerHTML = playerTwoScore;
+    if (!onlinePlay) {
+        playerOneArray = [];
+        playerTwoArray = [];
+        winningArrayAnimation = []
+        playerTurn = 0;
+        gameWon = false;
+        for (let i = 0; i < 42; i++) {
+            gameboardArray[i].classList.remove('red');
+            gameboardArray[i].classList.remove('yellow');
+            gameboardArray[i].classList.remove('winning-tiles');
+            gameboardArray[i].classList.add('empty');
+        };
+        playerOneScore = 0;
+        playerTwoScore = 0;
+        playerOneScoreContainer.innerHTML = playerOneScore;
+        playerTwoScoreContainer.innerHTML = playerTwoScore;
+    }
+
 }
 
 
 //************************************* This function is envoked after each move and detects whether any player has a winning array ****************//
+let winningArrayAnimation = []
+
 function checkWin() {
 
     for (let i = 0; i < winningArray.length; i++) {
         if ((gameWon != true) && (winningArray[i].every(elem => playerOneArray.includes(elem)))) {
             winSound.play();
             playerOneScore += 1;
+            winningArrayAnimation  = winningArray[i]
             playerOneScoreContainer.innerHTML = playerOneScore;
             gameWon = true;
             winner.innerHTML = "Player One Wins!";
-            winningScreen.classList.remove('display-none');
+            setTimeout(revealScreen, 1000)
+            winAnimation()
+            
 
         } else if ((gameWon != true) && (winningArray[i].every(elem => playerTwoArray.includes(elem)))) {
             winSound.play();
+            winningArrayAnimation = winningArray[i]
             playerTwoScore += 1;
             playerTwoScoreContainer.innerHTML = playerTwoScore;
             gameWon = true;
-            console.log("Player Two Wins");
-            winningScreen.classList.remove('display-none');
+            setTimeout(revealScreen, 1000)
+            winAnimation()
 
         } else {
             playerTurn += 0;
@@ -1301,6 +1317,18 @@ function checkWin() {
         winningScreen.classList.remove('display-none');
     };
 };
+
+function winAnimation() {
+    console.log(winningArrayAnimation[0])
+    console.log(winningArrayAnimation[1])
+    for (let i = 0; i < winningArrayAnimation.length; i++) {
+        gameboardArray[winningArrayAnimation[i]].classList.add('winning-tiles')
+    }
+}
+
+function revealScreen() {
+    winningScreen.classList.remove('display-none');
+}
 
 /*********************************   Playing Online ***********************/
 let playerName;
@@ -1329,7 +1357,6 @@ document.getElementById("search-btn").addEventListener('click', function (event)
     findGameContainer.classList.toggle('display-none');
     loadingAnimation.classList.toggle('display-none');
     playerName = document.getElementById("name").value;
-
     if (playerName == '' || playerName == null) {
         console.log('error');
     } else {
@@ -1357,6 +1384,14 @@ socket.on("find", (e) => {
         playerOneScoreContainer.innerText = foundObj.p1.p1score
         playerTwoScoreContainer.innerText = foundObj.p2.p2score
 
+        if (foundObj.p1.p1name === playerName) {
+            playerOneTurn.classList.remove("display-none");
+            playerTwoTurn.classList.add("display-none");
+        } else {
+            playerOneTurn.classList.add("display-none");
+            playerTwoTurn.classList.remove("display-none");
+        }
+
 
         if (value == 'yellow') {
             playerShell.classList.add('yellow-bg')
@@ -1371,42 +1406,75 @@ socket.on("find", (e) => {
 
 });
 
+let currentPlayer = 'red'
+
 socket.on("playing", (e) => {
     const foundObj = e.allPlayers.find(obj => obj.p1 && obj.p1.p1name === playerName || obj.p2 && obj.p2.p2name === playerName);
     if (foundObj) {
         const p1id = foundObj.p1 ? foundObj.p1.p1move : '';
         const p2id = foundObj.p2 ? foundObj.p2.p2move : '';
-
+        console.log(p1id)
+        console.log(p2id)
         if (p1id !== '') {
-            
             gameboardArray[p1id].classList.add('taken', 'red');
             gameboardArray[p1id].classList.remove('empty');
+            currentPlayer = 'yellow'
+            changeOnlineIndicator()
+       
         }
 
         if (p2id !== '') {
             gameboardArray[p2id].classList.add('taken', 'yellow');
             gameboardArray[p2id].classList.remove('empty');
+            currentPlayer = 'red'
+            changeOnlineIndicator()
+
         }
 
         if (foundObj.sum % 2 == 0) {
             onlineTurn = "yellow"
-            console.log("yellow is Here")
         } else {
-            
             onlineTurn = "red"
-            console.log("red is Here")
         }
     } else {
         console.log("Player not found or moves not available");
     }
 });
 
+function changeOnlineIndicator() {
+    if (currentPlayer == 'yellow') {
+        if (value == 'yellow') {
+            playerOneTurn.classList.remove('display-none')
+            playerTwoTurn.classList.add('display-none')
+        }   else {
+            playerOneTurn.classList.add('display-none')
+            playerTwoTurn.classList.remove('display-none')
+        }   
+
+    }   else {
+        if (value == 'red') {
+            playerOneTurn.classList.remove('display-none')
+            playerTwoTurn.classList.add('display-none')
+        }   else {
+            playerOneTurn.classList.add('display-none')
+            playerTwoTurn.classList.remove('display-none')
+        }   
+    }  
+}
+
+
 socket.on("winner", (e) => {
     const foundObj = e.allPlayers.find(obj => obj.p1 && obj.p1.p1name === playerName || obj.p2 && obj.p2.p2name === playerName);
+    winSound.play();
+    if (e.playerWin == 'draw') {
+        winner.innerHTML = "It's a draw!";
+    } else {
+        winner.innerHTML = e.playerWin + " wins!";
+        winningArrayAnimation = e.onlineWinningArray
+    }
+    winAnimation()
 
-    winner.innerHTML = e.playerWin + " wins!";
-    winningScreen.classList.remove('display-none');
-
+    setTimeout(revealScreen, 1000)
 
     if (playerName == foundObj.p1.p1name) {
         playerOneScoreContainer.innerText = foundObj.p1.p1score
@@ -1421,11 +1489,14 @@ socket.on("winner", (e) => {
 socket.on("reset", (e) => {
     winningScreen.classList.add('display-none');
     winningScreen.classList.add("display-none");
+    winningArrayAnimation = []
 
     for (let i = 0; i < 42; i++) {
+        gameboardArray[i].classList.remove('winning-tiles');
         gameboardArray[i].classList.remove('red');
         gameboardArray[i].classList.remove('yellow');
         gameboardArray[i].classList.add('empty');
+        gameboardArray[i].classList.remove('taken');
     };
 })
 
